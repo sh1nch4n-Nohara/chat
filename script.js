@@ -201,21 +201,21 @@ if (sendButton) {
     });
 }
 
-// ✅ **Move scrollToBottom function outside**
 function scrollToBottom() {
     const messagesDiv = document.getElementById("messages");
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    const inputContainer = document.getElementById("input-container");
+
+    setTimeout(() => {
+        messagesDiv.scrollTop = messagesDiv.scrollHeight - inputContainer.offsetHeight - 50; // Ensure last message is visible
+    }, 200);
 }
 
-// ✅ **Trigger auto-scroll whenever a message is sent**
-document.getElementById("send-btn").addEventListener("click", () => {
-    setTimeout(scrollToBottom, 100); 
-});
 
     // ✅ **Fetch Messages in Chat**
     if (window.location.pathname.includes("chat.html")) {
         const messagesDiv = document.getElementById("messages");
-        const chatHeader = document.getElementById("chat-header"); // Box to show recipient's name
+        const chatHeader = document.getElementById("chat-header") || document.getElementById("chat-username");
+        const chatUsernameSpan = document.getElementById("chat-username");
         const inboxId = localStorage.getItem("currentChatInbox");
         const loggedInUsername = localStorage.getItem("loggedInUsername");
 
@@ -223,8 +223,6 @@ document.getElementById("send-btn").addEventListener("click", () => {
             window.location.href = "home.html";
             return;
         }
-
-        console.log("Loading chat with inbox ID:", inboxId);
 
         // Fetch inbox details to get recipient's username
         const inboxRef = collection(db, "inboxes");
@@ -235,10 +233,14 @@ document.getElementById("send-btn").addEventListener("click", () => {
                 const inboxData = snapshot.docs[0].data();
                 const recipientUsername = inboxData.participants.find(user => user !== loggedInUsername);
 
-                console.log("Chatting with:", recipientUsername);
-                chatHeader.textContent = recipientUsername; // Show recipient's username at the top
+                // Set the username in the chat header span
+                if (chatUsernameSpan) {
+                    chatUsernameSpan.textContent = recipientUsername || "Chat";
+                }
             } else {
-                console.warn("Inbox not found!");
+                if (chatUsernameSpan) {
+                    chatUsernameSpan.textContent = "Chat";
+                }
             }
         }).catch((error) => {
             console.error("❌ Error fetching recipient's username:", error);
@@ -269,16 +271,5 @@ document.getElementById("send-btn").addEventListener("click", () => {
         }, (error) => {
             console.error("❌ Error fetching messages:", error);
         });
-    } 
-  function adjustMessageContainer() {
-    const messagesDiv = document.getElementById("messages");
-    const inputContainer = document.getElementById("input-container");
-    messagesDiv.style.maxHeight = `calc(100vh - ${inputContainer.offsetHeight + 20}px)`;
-}
-
-// ✅ Ensure layout updates after sending a message
-document.getElementById("send-btn").addEventListener("click", () => {
-    setTimeout(adjustMessageContainer, 100);
-});
-
-});
+    } // <-- this closes the if (window.location.pathname.includes("chat.html")) block
+}); // <-- this closes the main document.addEventListener("DOMContentLoaded", ...) block
