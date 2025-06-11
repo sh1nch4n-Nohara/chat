@@ -32,7 +32,7 @@
             font-size: 66px;
             display: flex;
             flex-direction: column;
-            margin-bottom: 160px; /* Increase margin to ensure visibility on mobile */
+            margin-bottom: 0; /* Remove margin, let media query handle it */
         }
 
         .sent-message {
@@ -131,9 +131,9 @@
 
         @media (max-width: 600px) {
             #messages {
-                font-size: 32px;         /* Smaller font for mobile */
-                margin-bottom: 180px;    /* More space for input on mobile */
-                padding-bottom: 10px;
+                font-size: 32px;
+                margin-bottom: 0;        /* Remove margin */
+                padding-bottom: 220px;   /* Large padding to ensure last message is visible */
             }
             .sent-message, .received-message {
                 font-size: 32px;
@@ -184,3 +184,4 @@
     <script src="script.js" type="module"></script>
 </body>
 </html>
+
