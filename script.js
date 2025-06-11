@@ -168,37 +168,50 @@ if (window.location.pathname.includes("home.html")) {
 
 
     // ✅ **Send Messages in Chat** (Fixed!)
-    const sendButton = document.getElementById("send-btn");
-    if (sendButton) {
-        sendButton.addEventListener("click", async () => {
-            const messageInput = document.getElementById("message-input");
-            const messageText = messageInput.value.trim();
-            const loggedInUsername = localStorage.getItem("loggedInUsername");
-            const inboxId = localStorage.getItem("currentChatInbox");
+const sendButton = document.getElementById("send-btn");
+if (sendButton) {
+    sendButton.addEventListener("click", async () => {
+        const messageInput = document.getElementById("message-input");
+        const messageText = messageInput.value.trim();
+        const loggedInUsername = localStorage.getItem("loggedInUsername");
+        const inboxId = localStorage.getItem("currentChatInbox");
 
-            console.log("Trying to send message:", { messageText, loggedInUsername, inboxId });
+        console.log("Trying to send message:", { messageText, loggedInUsername, inboxId });
 
-            if (!messageText || !loggedInUsername || !inboxId) {
-                console.error("❌ Message NOT sent: Missing values");
-                return;
-            }
+        if (!messageText || !loggedInUsername || !inboxId) {
+            console.error("❌ Message NOT sent: Missing values");
+            return;
+        }
 
-            try {
-                await addDoc(collection(db, "messages"), {
-                    inboxId: inboxId,
-                    sender: loggedInUsername,
-                    text: messageText,
-                    timestamp: new Date(),
-                    participants: inboxId.split("_")
-                });
+        try {
+            await addDoc(collection(db, "messages"), {
+                inboxId: inboxId,
+                sender: loggedInUsername,
+                text: messageText,
+                timestamp: new Date(),
+                participants: inboxId.split("_")
+            });
 
-                console.log("✅ Message successfully sent!");
-                messageInput.value = ""; // Clear input after sending
-            } catch (error) {
-                console.error("❌ Error sending message:", error);
-            }
-        });
-    }
+            console.log("✅ Message successfully sent!");
+            messageInput.value = ""; // Clear input after sending
+            scrollToBottom(); // Ensure smooth scrolling happens after sending
+        } catch (error) {
+            console.error("❌ Error sending message:", error);
+        }
+    });
+}
+
+// ✅ **Move scrollToBottom function outside**
+function scrollToBottom() {
+    const messagesDiv = document.getElementById("messages");
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+// ✅ **Trigger auto-scroll whenever a message is sent**
+document.getElementById("send-btn").addEventListener("click", () => {
+    setTimeout(scrollToBottom, 100); 
+});
+
     // ✅ **Fetch Messages in Chat**
     if (window.location.pathname.includes("chat.html")) {
         const messagesDiv = document.getElementById("messages");
