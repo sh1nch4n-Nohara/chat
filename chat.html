@@ -22,14 +22,16 @@
             flex-direction: column;
         }
         #messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            font-size: 44px;
-            display: flex;
-            flex-direction: column;
-            padding-bottom: 350px; /* Further increased bottom padding */
-        }
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    font-size: 44px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 120px; /* Adjusted bottom padding */
+    max-height: calc(100vh - 120px); /* Ensures messages never go behind input */
+}
+
 
 
         .message {
