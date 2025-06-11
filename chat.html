@@ -32,7 +32,7 @@
             font-size: 66px;
             display: flex;
             flex-direction: column;
-            padding-bottom: 160px;
+            margin-bottom: 140px; /* Add this line to reserve space for input on all devices */
         }
 
         .sent-message {
@@ -135,9 +135,10 @@
         <!-- 🔹 Added a Header for Extra Buttons -->
         <div class="chat-header">
             <button id="back-home-btn">← Home</button>
-            <span>Chat App</span>
+            <span id="chat-username">Chat App</span> <!-- Change this -->
             <button id="logout-btn">Logout</button>
         </div>
+
 
         <div id="messages"></div>
 
@@ -155,3 +156,4 @@
     <script src="script.js" type="module"></script>
 </body>
 </html>
+
