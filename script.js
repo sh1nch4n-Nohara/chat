@@ -269,5 +269,16 @@ document.getElementById("send-btn").addEventListener("click", () => {
         }, (error) => {
             console.error("❌ Error fetching messages:", error);
         });
-    }   
+    } 
+  function adjustMessageContainer() {
+    const messagesDiv = document.getElementById("messages");
+    const inputContainer = document.getElementById("input-container");
+    messagesDiv.style.maxHeight = `calc(100vh - ${inputContainer.offsetHeight + 20}px)`;
+}
+
+// ✅ Ensure layout updates after sending a message
+document.getElementById("send-btn").addEventListener("click", () => {
+    setTimeout(adjustMessageContainer, 100);
+});
+
 });
