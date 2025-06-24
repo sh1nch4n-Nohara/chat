@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     createdAt: new Date()
                 });
                 alert("Account created successfully!");
-                window.location.href = "login.html";
+                window.location.href = "index.html";
             } catch (error) {
                 alert(error.message);
             }
