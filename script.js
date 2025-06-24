@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
             await signOut(auth);
             localStorage.removeItem("loggedInUser");
             localStorage.removeItem("loggedInUsername");
-            window.location.href = "login.html";
+            window.location.href = "index.html";
         });
     }
 
