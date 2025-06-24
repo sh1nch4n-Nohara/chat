@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Home - Chat App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Aurora Wave Background */
+    .aurora {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 25vh;
+      width: 100%;
+      z-index: 0;
+      background: linear-gradient(120deg, #00f0ff, #8b00ff, #f0007c);
+      background-size: 300% 300%;
+      animation: auroraShift 12s ease infinite;
+      filter: blur(60px);
+      opacity: 0.25;
+    }
+
+    @keyframes auroraShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .neon-home {
+      position: relative;
+      padding: 40px 30px;
+      background: #111;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 900px;
+      text-align: center;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .neon-home::before {
+      content: '';
+      position: absolute;
+      top: -300%;
+      left: -300%;
+      width: 800%;
+      height: 800%;
+      background: linear-gradient(120deg, #00f0ff, #8b00ff, #f0007c, #00f0ff);
+      animation: rotate 6s linear infinite;
+      filter: blur(140px);
+      z-index: -1;
+    }
+
+    .neon-home::after {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px; right: 3px; bottom: 3px;
+      background: #111;
+      border-radius: 16px;
+      z-index: 1;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    h2 {
+      color: #d005ef;
+      margin-bottom: 25px;
+      animation: flicker 5s infinite;
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      45% { opacity: 0.6; }
+      48% { opacity: 0.2; }
+      50% { opacity: 0.9; }
+    }
+
+    input {
+      padding: 15px;
+      border: 2px solid #13b7cc;
+      border-radius: 25px;
+      font-size: 18px;
+      width: 80%;
+      margin: 10px 0;
+      z-index: 2;
+      position: relative;
+    }
+
+    button {
+      padding: 14px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-size: 24px;
+      width: 70%;
+      cursor: pointer;
+      z-index: 2;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #099874;
+      animation: pulse 1s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.05); }
+    }
+
+    h3 {
+      color: #00f0ff;
+      margin-top: 30px;
+      font-size: 22px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .chat-box {
+      padding: 20px;
+      background-color: #222;
+      color: #f0f0f0;
+      margin: 10px auto;
+      border-radius: 10px;
+      width: 95%;
+      max-width: 700px;
+      text-align: left;
+      transition: all 0.3s;
+      box-shadow: 0 0 10px rgba(0,255,255,0.1);
+      position: relative;
+      z-index: 2;
+    }
+
+    .chat-box:hover {
+      background-color: #1c0d2c;
+      box-shadow: 0 0 20px #eb08dc;
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 480px) {
+      .neon-home {
+        padding: 30px 20px;
+      }
+      input, button {
+        font-size: 18px;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="aurora"></div>
+
+  <div class="neon-home">
+    <h2>Welcome to Chat App</h2>
+    <input type="text" id="username-input" placeholder="Enter username to chat" />
+    <button id="start-chat-btn">Start Chat</button>
+    <h3>Inbox</h3>
+    <div id="inbox-container">
+      <div class="chat-box">Alice</div>
+      <div class="chat-box">Bob</div>
+      <div class="chat-box">Charlie</div>
+    </div>
+  </div>
+
+  <script src="script.js" type="module"></script>
+</body>
+</html>

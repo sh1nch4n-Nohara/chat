@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Neon Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      background: #0b0b0b;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    /* Neon Ball Canvas (Top) */
+    #neon-canvas {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 20vh;
+      z-index: 0;
+    }
+
+    /* Bouncing Text Canvas (Bottom) */
+    #text-canvas {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 20vh;
+      z-index: 0;
+    }
+
+    .neon-border {
+      position: relative;
+      padding: 40px 30px;
+      background: #111;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .neon-border::before {
+      content: '';
+      position: absolute;
+      top: -300%;
+      left: -300%;
+      width: 800%;
+      height: 800%;
+      background: linear-gradient(120deg, #00f0ff, #8b00ff, #f0007c, #00f0ff);
+      animation: rotate 5s linear infinite;
+      filter: blur(140px);
+      z-index: -1;
+    }
+    .neon-border::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      right: 3px;
+      bottom: 3px;
+      background: #111;
+      border-radius: 16px;
+      z-index: 1;
+    }
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      45% { opacity: 0.6; }
+      48% { opacity: 0.2; }
+      50% { opacity: 0.9; }
+    }
+    h2 {
+      animation: flicker 3s infinite;
+      color: #fff;
+      margin-bottom: 25px;
+      z-index: 2;
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      margin: 15px 0;
+      border: 2px solid #13b7cc;
+      border-radius: 16px;
+      font-size: 20px;
+      z-index: 2;
+      position: relative;
+      opacity: 0;
+      animation: slideIn 0.6s ease forwards;
+      transition: border-color 0.3s;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 24px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+      z-index: 2;
+      position: relative;
+    }
+
+    button:hover {
+      animation: pulse 1s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.05); }
+    }
+
+    #signup-link {
+      margin-top: 20px;
+      font-size: 18px;
+      z-index: 2;
+      position: relative;
+      color: #00f0ff;
+    }
+    #signup-link a {
+      text-decoration: underline dotted;
+      color: #00f0ff;
+    }
+    #signup-link a:hover {
+      color: #e608ae;
+    }
+
+    @media (max-width: 480px) {
+      .neon-border {
+        padding: 30px 20px;
+      }
+      input, button {
+        font-size: 18px;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="neon-canvas"></canvas>
+
+  <div class="neon-border">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+    <button id="login-btn">Login</button>
+    <p id="signup-link">Don't have an account? <a href="register.html">Sign up</a></p>
+  </div>
+
+  <canvas id="text-canvas"></canvas>
+
+  <script src="script.js" type="module"></script>
+
+  <!-- Neon Ball Animation Script -->
+  <script>
+    const canvas = document.getElementById("neon-canvas");
+    const ctx = canvas.getContext("2d");
+    const balls = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight * 0.2;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const colors = ['#00f0ff', '#8b00ff', '#f0007c'];
+
+    for (let i = 0; i < 12; i++) {
+      balls.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: 8 + Math.random() * 6,
+        dx: (Math.random() - 0.5) * 4,
+        dy: (Math.random() - 0.5) * 4,
+        color: colors[Math.floor(Math.random() * colors.length)]
+      });
+    }
+
+    function drawBalls() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let ball of balls) {
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        const gradient = ctx.createRadialGradient(ball.x, ball.y, 2, ball.x, ball.y, ball.radius);
+        gradient.addColorStop(0, ball.color);
+        gradient.addColorStop(1, '#00000000');
+        ctx.fillStyle = gradient;
+        ctx.shadowColor = ball.color;
+        ctx.shadowBlur = 20;
+        ctx.fill();
+
+        ball.x += ball.dx;
+        ball.y += ball.dy;
+
+        if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) ball.dx *= -1.2;
+        if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) ball.dy *= -1.2;
+      }
+      requestAnimationFrame(drawBalls);
+    }
+    drawBalls();
+  </script>
+
+  <!-- Bouncing Text Animation Script -->
+  <script>
+    const textCanvas = document.getElementById('text-canvas');
+    const tCtx = textCanvas.getContext('2d');
+
+    let texts = [
+      { text: "Chat App", x: 50, y: 30, dx: 2, dy: 1.5, color: '#AD1F9A'  },
+      { text: "by Momin", x: 200, y: 60, dx: -1.8, dy: 1.2, color: '#00f0ff' }
+    ];
+
+    function resizeTextCanvas() {
+      textCanvas.width = window.innerWidth;
+      textCanvas.height = window.innerHeight * 0.2;
+    }
+    window.addEventListener('resize', resizeTextCanvas);
+    resizeTextCanvas();
+
+    function drawText() {
+      tCtx.clearRect(0, 0, textCanvas.width, textCanvas.height);
+      tCtx.font = "bold 32px Arial";
+
+      texts.forEach(obj => {
+        tCtx.shadowColor = obj.color;
+        tCtx.shadowBlur = 25;
+        tCtx.fillStyle = obj.color;
+        tCtx.fillText(obj.text, obj.x, obj.y);
+
+        obj.x += obj.dx;
+        obj.y += obj.dy;
+
+        const textWidth = tCtx.measureText(obj.text).width;
+
+        if (obj.x + textWidth > textCanvas.width || obj.x < 0) obj.dx *= -1.2;
+        if (obj.y > textCanvas.height || obj.y < 30) obj.dy *= -1.2;
+      });
+
+      requestAnimationFrame(drawText);
+    }
+
+    drawText();
+  </script>
+</body>
+</html>
+
+<!-- rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+} -->
