@@ -55,6 +55,9 @@
 
 
     .sent-message, .received-message {
+      user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
       max-width: 80%;
       padding: 14px 18px;
       margin: 10px;
@@ -65,10 +68,14 @@
     }
 
     .sent-message {
-      background: #007bff;
-      color: white;
-      align-self: flex-end;
-    }
+  background: #007bff;
+  color: white;
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column; /* ⬅️ Add this */
+  align-items: flex-end;   /* ⬅️ Optional: Align the status to the right */
+}
+
 
     .received-message {
       background: #e3f2fd;
@@ -138,6 +145,15 @@
       font-size: 14px;
       padding: 6px 12px;
     }
+    #messages-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
 
     @media (max-width: 600px) {
       .sent-message, .received-message {
@@ -151,20 +167,22 @@
   </style>
 </head>
 <body>
-
+  
+  
   <div id="chat-container">
     <div class="glow-header">
       <button id="back-home-btn">← Home</button>
       <span id="chat-username">Chat App</span>
       <button id="logout-btn">Logout</button>
     </div>
-
+    
     <div id="messages">
       <!-- Example messages -->
       <div class="received-message">Hey there 👋</div>
       <div class="sent-message">Hello, what's up!</div>
     </div>
-
+    
+    <div id="messages-container"></div>
     <div id="input-container">
       <input type="text" id="message-input" placeholder="Type a message..." />
       <button id="send-btn">Send</button>
