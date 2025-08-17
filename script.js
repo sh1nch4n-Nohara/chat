@@ -525,9 +525,15 @@ if (deleteAllBtn) {
 
 
 }
-
+const profileButton = document.getElementById("profile-btn");
+if (profileButton) {
+  profileButton.addEventListener("click", () => {
+    alert("coming soon");
+  });
+}
 
 });
+
 
 
 
