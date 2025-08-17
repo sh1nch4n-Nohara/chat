@@ -9,7 +9,8 @@ import {
   getDocs,
   where,
   doc,
-  updateDoc
+  updateDoc,
+  deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 import {
   getAuth,
@@ -194,6 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
         await addDoc(collection(db, "messages"), {
           inboxId,
           sender: loggedInUsername,
+          receiver: localStorage.getItem("chatWith"),
           text: messageText,
           timestamp: serverTimestamp(),
           status: "sent",
@@ -475,6 +477,58 @@ document.addEventListener("DOMContentLoaded", () => {
       document.addEventListener("click", close);
     }, 10);
   }
+const deleteAllBtn = document.getElementById("delete-all-btn");
+if (deleteAllBtn) {
+  const loggedInUsername = localStorage.getItem("loggedInUsername");
+  const targetUser = localStorage.getItem("chatWith");
+console.log("Deleting inbox with:", targetUser); // ✅ Debug check
+
+
+  // Place this near the bottom after DOMContentLoaded and after you load chat state
+const deleteAllBtn = document.getElementById("delete-all-btn");
+
+if (deleteAllBtn) {
+  deleteAllBtn.addEventListener("click", async () => {
+    try {
+      const inboxId = localStorage.getItem("currentChatInbox"); // use the same key used across the app
+      if (!inboxId) {
+        alert("Inbox not found. Reopen the chat and try again.");
+        return;
+      }
+
+      const ok = confirm(`Delete all messages in this chat?\nInbox: ${inboxId}`);
+      if (!ok) return;
+
+      // Fetch all messages for this inbox
+      const qRef = query(collection(db, "messages"), where("inboxId", "==", inboxId));
+      const snap = await getDocs(qRef);
+
+      if (snap.empty) {
+        alert("No messages to delete.");
+        return;
+      }
+
+      // Batch-like delete using Promise.all (client SDK)
+      const tasks = [];
+      snap.forEach(d => {
+        tasks.push(deleteDoc(doc(db, "messages", d.id)));
+      });
+
+      await Promise.all(tasks);
+      alert("Inbox cleared.");
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert("Error deleting messages: " + (err?.message || err));
+    }
+  });
+}
+
+
+}
+
+
 });
+
+
 
 
